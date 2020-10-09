@@ -3,7 +3,7 @@ const router = express.Router();
 const isLoggedIn = require("../utils/isLoggedIn");
 
 router.get("/", (req, res) => {
-	res.render("landing");
+	res.redirect("/trails");
 })
 
 router.get("/account", isLoggedIn, (req, res) => {
