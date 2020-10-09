@@ -35,6 +35,7 @@ try {
 	mongoose.connect(config.db.connection, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 } catch (err) {
 	console.log("could not connect using config, probably not working locally");
+	console.log(process.ENV.DB_CONNECTION_STRING);
 	mongoose.connect(process.ENV.DB_CONNECTION_STRING, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 }
 
