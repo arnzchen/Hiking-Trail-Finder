@@ -1,0 +1,20 @@
+<%- include("partials/header") %>
+		
+
+<div class="container">
+	<h1 class="d-inline-block">
+		Add New Comment As <span class="text-primary"> <%= user.username %> </span>
+	</h1>
+	<form action="/trails/<%= trailId %>/comments" method="POST">
+		<div class="form-group">
+			<textarea class="form-control" name="text" id="text" rows="8" cols="80" placeholder="Comment text here..." required></textarea>
+		</div>
+		<input type="hidden" name="trailId" value="<%= trailId %>">
+		<button type="submit" class="btn btn-primary">
+			Submit Comment
+		</button>
+	</form>
+</div>
+
+
+<%- include("partials/footer") %>

@@ -1,0 +1,15 @@
+<%- include("partials/header") %>
+		<div class="container">
+			<div class="row mt-2">
+			<% trails.forEach((trail) => { %>
+			<div class="card m-3">
+				<a href="/trails/<%= trail._id %>">
+					<img class="card-img card-img-top" src="<%= trail.image %>" alt="Picture of the Trail">
+				</a>
+				<h3 class="card-title mt-3"><%= trail.title %></h3>
+				<p class="card-text mb-3 mx-3"><%= trail.description %></p>
+			</div>		
+			<% }) %>
+		  </div>
+	    </div>
+<%- include("partials/footer") %>
