@@ -25,16 +25,18 @@
 				</tr>
 			  </tbody>
 			</table>
-			<a href="/trails/<%= trail._id %>/edit">
-				<button class="btn btn-outline-info btn-lg btn-block mb-2">
-					Edit
-				</button>
-			</a>
-			<form action="/trails/<%= trail._id %>?_method=DELETE" method="POST">
-				<button type="submit" class="btn btn-outline-danger btn-lg btn-block">
-					Delete
-				</button>
-			</form>
+			<% if (user && user.username === trail.owner.username) { %>
+				<a href="/trails/<%= trail._id %>/edit">
+					<button class="btn btn-outline-info btn-lg btn-block mb-2">
+						Edit
+					</button>
+				</a>
+				<form action="/trails/<%= trail._id %>?_method=DELETE" method="POST">
+					<button type="submit" class="btn btn-outline-danger btn-lg btn-block">
+						Delete
+					</button>
+				</form>
+			<% } %>
 		</div>
 		<div class="col-6 show_image-container">
 			<img src='<%= trail.image %>'>
@@ -53,19 +55,23 @@
 			<div class="col-2 border-right my-auto">
 				<%= comment.user.username %>
 			</div>
-			<div class="col-2 border-right my-auto d-flex flex-wrap justify-content-center">
-				<a class="btn btn-sm btn-success w-75 p-0 my-1" href="/trails/<%= trail._id %>/comments/<%= comment._id %>/edit">
-					Edit
-				</a>
-				<form class="w-75 my-1" action="/trails/<%= trail._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
-					<button class="btn btn-sm btn-danger w-100 p-0">
-						Delete	
-					</button>
-				</form>
-			</div>
+			
 			<div class="col-8 my-auto">
 				<%= comment.text %>
 			</div>
+			
+			<% if (user && user.username === comment.user.username) { %>
+				<div class="col-2 border-right my-auto d-flex flex-wrap justify-content-center">
+					<a class="btn btn-sm btn-success w-75 p-0 my-1" href="/trails/<%= trail._id %>/comments/<%= comment._id %>/edit">
+						Edit
+					</a>
+					<form class="w-75 my-1" action="/trails/<%= trail._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+						<button class="btn btn-sm btn-danger w-100 p-0">
+							Delete	
+						</button>
+					</form>
+				</div>
+			<% } %>
 		</div>
 	<% })) %>
 	<div class="py-5"> </div>
