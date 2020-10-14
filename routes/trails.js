@@ -42,12 +42,12 @@ router.post("/", isLoggedIn, async (req, res) => {
 	}
 })
 
-
+//New
 router.get("/new", isLoggedIn, (req, res) => {
 	res.render("trails_new");
 })
 
-//search
+//Search
 router.get("/search", async (req, res) => {
 	try {
 		const trails = await Trail.find({
@@ -59,9 +59,20 @@ router.get("/search", async (req, res) => {
 	} catch (err) {
 		res.send("Error - trails.js search")
 	}
-})
+}) 
 
+//Landscape
+router.get("/landscape/:landscape", async (req, res) => {
+	const validLandscapes = ["mountains", "oceans", "forests", "plains", "lakes"];    
+	if (validLandscapes.includes(req.params.landscape.toLowerCase())) {
+		const trails = await Trail.find({landscape: req.params.landscape}).exec();
+		res.render("trails", {trails});
+	} else {
+		res.send("Please enter a valid landscape");
+	}
+});
 
+//Show
 router.get("/:id", async (req, res) => {
 	try {
 		const trail = await Trail.findById(req.params.id).exec();
@@ -101,6 +112,7 @@ router.put("/:id", isLoggedIn, checkTrailOwner, async (req, res) => {
 	}
 })
 
+//Delete
 router.delete("/:id", isLoggedIn, checkTrailOwner, async (req, res) => {
 	try {
 		const trail = await Trail.findByIdAndDelete(req.params.id).exec();
