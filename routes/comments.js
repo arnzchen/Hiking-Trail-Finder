@@ -20,40 +20,47 @@ router.post("/", isLoggedIn, async (req, res) => {
 		text: req.body.text,
 		trailId: req.body.trailId
 	})
+	req.flash("success", "Comment created!");
 	res.redirect(`/trails/${req.body.trailId}`);
 	} catch (err) {
-		res.send("Error - comments.js 18")
+		req.flash("error", "Error creating comment");
+		res.redirect("/trails");
 	}
 })
 
-
+// Edit Comment 
 router.get("/:commentId/edit", isLoggedIn, checkCommentOwner, async (req, res) => {
 	try {
 		const trail = await Trail.findById(req.params.id).exec();
 		const comment = await Comment.findById(req.params.commentId).exec();
-		console.log("comment: ", comment);
 		res.render("comments_edit", {trail, comment});
 	} catch (err) {
-		res.send("Error - comments.js edit")
+		console.log(err);
+		res.redirect("/trails");
 	}
 })
 
-
+// Update Comment
 router.put("/:commentId", isLoggedIn, checkCommentOwner, async (req, res) => {
 	try {
 		const comment = await Comment.findByIdAndUpdate(req.params.commentId, {text: req.body.text}, {new: true});
+		req.flash("success", "Comment updated successfully!");
 		res.redirect(`/trails/${req.params.id}`);
 	} catch (err) {
-		res.send("Error - comments.js comment put")
+		req.flash("error", "Error updating comment");
+		res.redirect("/trails");
 	}
 })
 
+// Delete Comment
 router.delete("/:commentId", isLoggedIn, checkCommentOwner, async (req, res) => {
 	try {
 		const comment = await Comment.findByIdAndDelete(req.params.commentId);
-		res.redirect(`/trails/${req.params.id}`)
+		req.flash("success", "Comment deleted successfully");
+		res.redirect(`/trails/${req.params.id}`);
 	} catch (err) {
-		res.send("Error = comments.js comment delete")
+		req.flash("error", "Error deleting comment");
+		res.redirect("/trails");
 	}
 })
 

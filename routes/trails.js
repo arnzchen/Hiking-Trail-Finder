@@ -36,9 +36,11 @@ router.post("/", isLoggedIn, async (req, res) => {
 	
 	try {
 		const trail = await Trail.create(newTrail);
+		req.flash("success", `${trail.title} trail created!`);
 		res.redirect(`/trails/${trail._id}`);
 	} catch (err) {
-		res.send("err");
+		req.flash("error", "Error creating trail");
+		res.redirect("/trails");
 	}
 })
 
@@ -105,10 +107,11 @@ router.put("/:id", isLoggedIn, checkTrailOwner, async (req, res) => {
 	
 	try {
 		const trail = await Trail.findByIdAndUpdate(req.params.id, trailBody, {new: true}).exec();
+		req.flash("success", "trail updated successfully!");
 		res.redirect(`/trails/${req.params.id}`);
 	} catch (err) {
-		console.log("here");
-		res.send("Error");
+		req.flash("error", "Error updating trail");
+		res.redirect("/trails");
 	}
 })
 
@@ -116,9 +119,11 @@ router.put("/:id", isLoggedIn, checkTrailOwner, async (req, res) => {
 router.delete("/:id", isLoggedIn, checkTrailOwner, async (req, res) => {
 	try {
 		const trail = await Trail.findByIdAndDelete(req.params.id).exec();
+		req.flash("success", "trail deleted successfully!");
 		res.redirect("/trails");
 	} catch (err) {
-		res.send("Error deleting:");
+		req.flash("error", "Error deleting trail");
+		res.redirect("back");
 	}
 })
 

@@ -2,6 +2,7 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+const flash = require("connect-flash");
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const morgan = require("morgan");
@@ -55,9 +56,12 @@ app.use(expressSession({
 app.use(morgan('tiny'));
 
 
-
+// Body Parser
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
+
+// Connect Flash
+app.use(flash());
 
 // Passport Config
 app.use(passport.initialize());
@@ -66,9 +70,11 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 passport.use(new LocalStrategy(User.authenticate()));
 
-// Current user Config
+// State Config
 app.use((req, res, next) => {
 	res.locals.user = req.user;
+	res.locals.errorMessage = req.flash("error");
+	res.locals.successMessage = req.flash("success");
 	next();
 })
 
