@@ -14,7 +14,9 @@ const trailSchema = new mongoose.Schema({
 			ref: "User"
 		},
 		username: String
-	}
+	},
+	upvotes: [String],
+	downvotes: [String]
 })
 
 trailSchema.index({

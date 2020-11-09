@@ -31,7 +31,9 @@ router.post("/", isLoggedIn, async (req, res) => {
 		owner: {
 			id: req.user._id,
 			username: req.user.username
-		}
+		},
+		upvotes:[req.user.username],
+		downvotes:[]
 	}
 	
 	try {
@@ -73,6 +75,57 @@ router.get("/landscape/:landscape", async (req, res) => {
 		res.send("Please enter a valid landscape");
 	}
 });
+
+// Vote
+router.post("/vote", isLoggedIn, async (req, res) => {
+	console.log(req.body);
+	
+	const trail = await Trail.findById(req.body.trailId);
+	const alreadyUpvoted = trail.upvotes.indexOf(req.user.username);
+	const alreadyDownvoted = trail.downvotes.indexOf(req.user.username);
+	
+	let response = {};
+	if (alreadyUpvoted === -1 && alreadyDownvoted === -1) {
+		if (req.body.voteType === "up") {
+			trail.upvotes.push(req.user.username);
+			trail.save();
+			response.message = "Upvoted!"
+		} else if (req.body.voteType === "down") {
+			trail.downvotes.push(req.user.username);
+			trail.save();
+			response.message = "Downvoted!"
+		} else {
+			response.message = "not yet voted error"
+		}
+	} else if (alreadyUpvoted !== -1) {
+		trail.upvotes.splice(alreadyUpvoted, 1);
+		if (req.body.voteType === "up") {
+			response.message = "Upvote Removed!"
+		} else if (req.body.voteType === "down") {
+			trail.downvotes.push(req.user.username);
+			response.message = "Downvoted!"
+		} else {
+			response.message = "already upvoted error"
+		}
+		trail.save();
+	} else if (alreadyDownvoted !== -1) {
+		trail.downvotes.splice(alreadyDownvoted, 1);
+		if (req.body.voteType === "up") {
+			trail.upvotes.push(req.user.username);
+			response.message = "Upvoted!"
+		} else if (req.body.voteType === "down") {
+			response.message = "Downvote Removed!"
+		} else {
+			response.message = "already downvoted error"
+		}
+		trail.save();
+	} else {
+		response.message = "voted error"
+	}
+	
+	res.json(response);
+})
+
 
 //Show
 router.get("/:id", async (req, res) => {
