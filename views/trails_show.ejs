@@ -43,22 +43,22 @@
 		</div>
 	</div>
 	<div class="row">
-		<a href="/trails/<%= trail._id %>/comments/new" class="col-3">
+		<a href="/trails/<%= trail._id %>/comments/new" class="col-3 pr-0">
 			<button class="btn btn-success btn-lg mt-3 mb-4">
 				Add Comment
 			</button>
 		</a>
-		<div class="col-2">
+		<div class="col-3">
 			<% if (user && trail.upvotes.indexOf(user.username) != -1) { %>
-				<button id="upvote_btn" class="btn btn-success btn-lg mt-3">+</button>
+				<button id="upvote_btn" class="btn btn-success btn-med mt-3">+</button>
 			<% } else if (user) { %>
-				<button id="upvote_btn" class="btn btn-outline-success btn-lg mt-3">+</button>
+				<button id="upvote_btn" class="btn btn-outline-success btn-med mt-3">+</button>
 			<% } %>
-			<span id="score" class="mx-2"><%= trail.upvotes.length - trail.downvotes.length %></span>
+			<span id="score" class="mx-2 mt-2">Rating: <%= trail.upvotes.length - trail.downvotes.length %></span>
 			<% if (user && trail.downvotes.indexOf(user.username) != -1) { %>
-				<button id="downvote_btn" class="btn btn-danger btn-lg mt-3">-</button>
+				<button id="downvote_btn" class="btn btn-danger btn-med mt-3">-</button>
 			<% } else if (user) { %>
-				<button id="downvote_btn" class="btn btn-outline-danger btn-lg mt-3">-</button>
+				<button id="downvote_btn" class="btn btn-outline-danger btn-med mt-3">-</button>
 			<% } %>
 			
 		</div>

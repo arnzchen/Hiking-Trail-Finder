@@ -39,7 +39,7 @@ const sendVote = async (voteType) => {
 }
 
 const handleVote = (newScore, code) => {
-	score.innerText = newScore;
+	score.innerText = "Rating: " + newScore;
 	
 	// button colors to reflect vote
 	if (code === 0) {
