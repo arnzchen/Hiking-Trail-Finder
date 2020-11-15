@@ -85,44 +85,46 @@ router.post("/vote", isLoggedIn, async (req, res) => {
 	const alreadyDownvoted = trail.downvotes.indexOf(req.user.username);
 	
 	let response = {};
+	// voting
 	if (alreadyUpvoted === -1 && alreadyDownvoted === -1) {
 		if (req.body.voteType === "up") {
 			trail.upvotes.push(req.user.username);
 			trail.save();
-			response.message = "Upvoted!"
+			response = {message : "Upvoted!", code: 1};
 		} else if (req.body.voteType === "down") {
 			trail.downvotes.push(req.user.username);
 			trail.save();
-			response.message = "Downvoted!"
+			response = {message: "Downvoted!", code: -1};
 		} else {
-			response.message = "not yet voted error"
+			response = {message: "not yet voted error", code: "err"};
 		}
 	} else if (alreadyUpvoted !== -1) {
 		trail.upvotes.splice(alreadyUpvoted, 1);
 		if (req.body.voteType === "up") {
-			response.message = "Upvote Removed!"
+			response = {message: "Upvote Removed!", code: 0};
 		} else if (req.body.voteType === "down") {
 			trail.downvotes.push(req.user.username);
-			response.message = "Downvoted!"
+			response = {message: "Downvoted!", code: -1};
 		} else {
-			response.message = "already upvoted error"
+			response = {message: "already upvoted error", code: "err"};
 		}
 		trail.save();
 	} else if (alreadyDownvoted !== -1) {
 		trail.downvotes.splice(alreadyDownvoted, 1);
 		if (req.body.voteType === "up") {
 			trail.upvotes.push(req.user.username);
-			response.message = "Upvoted!"
+			response = {message: "Upvoted!", code: 1};
 		} else if (req.body.voteType === "down") {
-			response.message = "Downvote Removed!"
+			response = {message: "Downvote removed!", code: 0};
 		} else {
-			response.message = "already downvoted error"
+			response = {message: "already downvoted error", code: "err"};
 		}
 		trail.save();
 	} else {
-		response.message = "voted error"
+		response = {message: "voting error", code: "err"};
 	}
 	
+	response.score = trail.upvotes.length - trail.downvotes.length;
 	res.json(response);
 })
 
